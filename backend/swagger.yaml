@@ -1,0 +1,337 @@
+openapi : 3.0.0
+
+info:
+    title: "Nature's Basket-Ecommerce Website"
+    version: '1.0'
+    description: 'This is the documentation for the project'
+    contact: 
+        name: Group 39
+        email: mahesh.c19@iiits.in
+
+
+servers: 
+    -   url : http://localhost:5000
+        description: "main server"
+
+tags:
+  - name: products
+    description: API to manage Nature's Basket products
+  - name: User
+    description: API to manage Nature's Basket USER Details
+  - name: Order
+    description: API to manage Orders
+
+
+paths:
+    /api/products:
+        get: 
+            summary: "Gives all the information about the Vegetables"
+            tags: [products]
+            responses:
+                '200':
+                    description: 'Fetching all the Vegetables is succesfull'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Product'
+  
+    /api/products/{id}:
+          get:
+            summary: "Get posts by title"
+            tags: [products]
+            parameters:
+              - in: path
+                name: id
+                required: true
+                description: "Get the product by search"
+                schema: 
+                    type: string
+            responses:
+                '200':
+                    description: 'Fetching all the posts is succesfull'
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Product'
+    
+    /api/products/{id}/reviews:
+        post:
+            summary: "Post the review for the product id"
+            tags: [products]
+            parameters:
+              - in : path
+                name : id
+                required: true
+                description: "auto-generated Post ID by Mongodb"
+                schema: 
+                    type: string
+            requestBody:
+               required: true
+               content:
+                  application/json:
+                    schema:
+                        $ref: '#/components/schemas/Reviews'
+            responses:
+              '201' :
+                description: "Review Of the Product "
+                
+    
+
+    /api/users/:
+        post:
+            summary: Post the details of the user by login  
+            tags: [User]
+            requestBody :
+              required: true
+              content:
+                 application/json:
+                   schema:
+                     $ref: "#/components/schemas/User"
+            responses:
+              '201' :
+                description: "Created user Successfully"  
+    /api/users/login:
+        post:
+          summary: 'Posting the deatils of login'
+          tags: [User]
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/login'
+          responses: 
+            '200': 
+                description: 'Post Details Updated Successfully'
+    /api/users/profile:
+        get:
+          summary: "Get the details Of the profile "
+          tags: [User]
+          responses:
+            "200":
+              description: Get all the profiles 
+              content:
+                application/json:
+                  schema:
+                   $ref: "#/components/schemas/profile"
+        put:
+          summary: " update the user profile"
+          tags: [User]
+          requestBody:
+            required: true
+            content:
+              application/json: 
+                schema:
+                  $ref: "#/components/schemas/profile"
+          responses:
+              "201":
+                description: updated successfully
+           
+    /api/orders/{id}:
+        get:
+           summary: "get the order details"
+           tags: [Order]
+           parameters:
+            - name : id
+              in  : path
+              required: true
+              description: Deatils of the Order id
+              schema:
+                type : string
+           responses:
+                "200":
+                 description: successfully get the details of orders
+                 content:
+                  application/json:
+                    schema:
+                        $ref : "#/components/schemas/orders" 
+    /api/orders:
+        post:
+          summary: posting the details of shipping
+          tags: [Order]
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema: 
+                  $ref: '#/components/schemas/orders'
+          responses: 
+            '200': 
+                description: 'Post Details Updated Successfully'
+            
+
+components:
+    securitySchemes:
+      bearerAuth:            # arbitrary name for the security scheme
+        type: http
+        scheme: bearer
+        bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+# 2) Apply the security globally to all operations
+
+    schemas:
+        Product:
+            type: object
+            required:
+                - name
+                - price        
+                - description
+                - countInStock
+            properties:
+                id :
+                  type: string
+                name:
+                    type: string
+                price:
+                    type: string
+                description:
+                    type: string
+                countInStock:
+                    type: number
+                
+            example:
+                id : 61d6c81af01ac04d56d52790
+                name: Tomato
+                price: 21.25
+                description: Fresh vegetable and gives healthy mind set.
+                countInStock: 50
+        Reviews:
+            type: object
+            required: 
+               - rating
+               - comment
+            properties:
+               rating:
+                  type: number
+               comment:
+                  type: string
+            example:
+                rating: 4
+                comment: Nice Bottle Gourd
+        User:
+            type: object
+            required:
+                - name
+                - email
+                - password
+            properties:
+                name:
+                    type: string
+                email:
+                    type: string
+                password:
+                    type: string
+            example:
+                name: Deepak
+                email: deepak.d19@iiits.in
+                password: deepak
+        login:
+            type: object
+            required: 
+               - email
+               - password
+            properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            example:
+                email: jane@example.com
+                password: 123456
+        profile:
+            type: object
+            required: 
+               - name
+               - email
+            properties:
+                name:
+                  type: string
+                email:
+                  type: string
+            example:
+                email: jane@example.com
+                name: janedoe
+        orders:
+             type: object
+             required: 
+               - id
+               - user
+               - orderItems
+               - shippingAddress
+               - taxprice
+               - shippingprice
+               - totalprice
+             properties:
+                id :
+                    type: string
+                user :
+                     type: string
+                orderitems:
+                     type: string
+                shippingAddress:
+                     type: string
+                taxprice:
+                     type: number
+                shippingprice:
+                    type : number
+                totalprice: 
+                    type : number
+             example:
+                id : 624af2317254f9201cb2444f
+                shippingAddress: Sri city
+                taxPrice: 3.34
+                shippingPrice: 100
+                totalPrice: 125.59
+                orderItems: Bitter Gourd/Karela - 250 g
+                user:  jane@example.com
+
+        # shipping:
+        #      type: object
+        #      required: 
+        #        - Address
+        #        - city
+        #        - postalCode
+        #        - country
+        #      properties:
+        #         id :
+        #             type: string+
+        #         Address :
+        #              type: string
+        #         city:
+        #              type: string
+        #         postalCode:
+        #              type: number
+        #         country:
+        #              type: string
+        #      example:
+        #         id : 624af2317254f9201cb2444f
+        #         Address: Sri city
+        #         city: Chittor
+        #         postalCode: 507211
+        #         country: India
+
+        # Reviews:
+        #     type: object
+        #     required:
+        #         # - name
+        #         - rating
+        #         - comment
+        #     properties: 
+        #         _id:
+        #             type: string
+        #         name:
+        #             type: string
+        #         rating:
+        #             type: number
+        #         comment: 
+        #             type: string
+        #         user:
+        #             type: string
+                
+        #     example:
+        #       rating: 5
+        #       comment: good product
+
+security:
+      - bearerAuth: []
