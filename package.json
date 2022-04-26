@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "Online grocery store",
   "main": "server.js",
-  "type": "module",
+  "type": "module", 
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
-    "client": "npm start --prefix frontend"
+    "client": "npm start --prefix ecommerce",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ecommerce && npm run build --prefix ecommerce"
   },
   "repository": {
     "type": "git",
