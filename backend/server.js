@@ -1,4 +1,4 @@
-// import path from 'path'
+import path from 'path'
 import express from 'express'
 import dotenv from 'dotenv'
 import colors from 'colors'
@@ -18,6 +18,7 @@ dotenv.config()
 connectDB()
 
 const app = express()
+
 
 morgan.token("wbdaccess", "User trying to access the :url");
   let logsinfo = fsr.getStream({filename:"test.log", verbose: true});
@@ -40,19 +41,20 @@ app.use("/api-docs",
 //   res.send(process.env.PAYPAL_CLIENT_ID)
 // )
 
-// const __dirname = path.resolve()
-// app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+const __dirname = path.resolve()
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(path.join(__dirname, '/frontend/build')))
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/ecommerce/build')))
 
-//   app.get('*', (req, res) =>
-//     res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
-//   )
-// } 
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'ecommerce', 'build', 'index.html'))
+  )
+} else {
   app.get('/', (req, res) => {
     res.send('API is running....')
   })
+}
 
 
 app.use(notFound)
