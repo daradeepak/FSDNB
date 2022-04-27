@@ -5,6 +5,7 @@ import Product from '../components/Product'
 import Message from '../components/Message'
  import Loader from '../components/Loader'
 import { listProducts } from '../actions/productActions'
+import  Slider from '../Slider'
 
 const HomeScreen = ({match}) => {
     const keyword = match.params.keyword
@@ -20,6 +21,7 @@ const HomeScreen = ({match}) => {
 
     return (
         <>
+        <Slider></Slider>
             <h1> Latest Products for You </h1>
             {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : <Row>
                 {products.map((product) => (
