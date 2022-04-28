@@ -23,7 +23,7 @@ const HomeScreen = ({match}) => {
         <>
         <Slider></Slider>
             <h1> Latest Products for You </h1>
-            {loading ? <Loader /> : error ? <Message variant='danger'>{error}</Message> : <Row>
+            {loading ? <Loader /> : error ? <Message variant='success'>{error}</Message> : <Row>
                 {products.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={5} xl={3}>
                     <Product product={product} />
