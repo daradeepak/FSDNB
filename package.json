@@ -9,6 +9,7 @@
     "server": "nodemon backend/server",
     "client": "npm start --prefix ecommerce",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build:client": "cd ecommerce && CI=false && npm run build",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix ecommerce && npm run build --prefix ecommerce"
