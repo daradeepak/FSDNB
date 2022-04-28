@@ -1,10 +1,16 @@
 import asyncHandler from 'express-async-handler'
 import Product from '../models/productModel.js'
+import Redis from 'redis'
+
+const redisClient = Redis.createClient();
+
+redisClient.connect()
 
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
+  
   const keyword = req.query.keyword
     ? {
         name: {
@@ -13,10 +19,9 @@ const getProducts = asyncHandler(async (req, res) => {
         },
       }
     : {}
-const products = await Product.find({...keyword})
+    const products = await Product.find({...keyword})
+    res.json(products)
 
-
-res.json(products)
 })
 
 // @desc    Fetch single product
