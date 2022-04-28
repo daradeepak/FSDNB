@@ -38,7 +38,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "naturesbasket"
           heroku_email: "deepak.dara07@gmail.com"
-        env:
+        env: 
           HD_MONGO_URI: ${{ secrets.MONGODB_URI }}
           HD_SECRET: ${{secrets.PASS_SEC}}
           HD_SKIP_PREFLIGHT_CHECK: true
